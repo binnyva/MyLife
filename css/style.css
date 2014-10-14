@@ -118,3 +118,17 @@ ul.horizontal li {
 	border-left:1px solid #b2dbfb;
 	border-radius: 5px 0 0 5px;
 }
+
+#content {
+	margin-top:80px;
+}
+
+#all-entries {
+	width:70%;
+}
+
+.entry p {
+	font-size: 120%;
+	line-height: 110%;
+	margin-left: 10px;
+}

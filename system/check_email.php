@@ -18,6 +18,7 @@ function checkMail() {
 		$in = array();
 		if($emails) {
 			print "Got " . count($emails) . " email(s)\n";
+
 			foreach($emails as $uid) {
 				$header = imap_headerinfo($inbox, $uid);
 				$body = htmlentities(imap_fetchbody($inbox, $uid, 1));
@@ -29,7 +30,7 @@ function checkMail() {
 				$success = createEntry($from, $body, $subject);
 				
 				if($success) {
-					//imap_delete($inbox, $uid);
+					// imap_delete($inbox, $uid); // Delete the Emails. Are you SURE?!
 					imap_mail_move($inbox,$uid,"Done");
 					print "$from : $subject\n";
 				}
@@ -41,7 +42,7 @@ function checkMail() {
 }
 
 
-function createEntry($from, $body, $subject) {
+function parseEmail($from, $body, $subject) {
 	global $sql;
 
 	$user_id = $sql->getOne("SELECT id FROM User WHERE email='$from'");
@@ -49,28 +50,10 @@ function createEntry($from, $body, $subject) {
 	$date_raw = str_replace(array("What Happened on ",'Re: '), '', $subject);
 	$date = date('Y-m-d', strtotime($date_raw));
 
-	$locked = 0;
-	if(strpos($body, 'LOCKED') !== false) $locked = 1;
+	if(!$body) return 0;
 
-	$insert_id = $sql->insert("Entry", array(
-			'body'		=> $body,
-			'date'		=> $date,
-			'title'		=> $subject,
-			'added_on'	=> 'NOW()',
-			'locked'	=> $locked,
-			'user_id'	=> $user_id,
-		));
-	parseTags($body, $insert_id);
+	createEntry($body, $user_id, $date, $subject);
 
-	return $insert_id;
-}
-
-function parseTags($body, $entry_id) {
-	preg_match_all("/#(\w+)/", $body, $matches);
-
-	if($matches) {
-		saveAllTags($entry_id, $matches[1]);
-	}
 }
 
 //createEntry('binnyva@gmail.com', "Hello world. <br /> How are you?\n#old #tag-test #tagger LOCKED",''); // :DEBUG:
