@@ -22,5 +22,6 @@ foreach ($users as $user) {
 
 	$body = str_replace(array_keys($replaces), array_values($replaces), $body);
 
-	@email($user['email'], "What Happened on $date", $body);	
+	@email($user['email'], "What Happened on $date", $body);
+	print "Emailed '$user[name]' at '$user[email]'\n";
 }
