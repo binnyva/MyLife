@@ -2,7 +2,7 @@
 require('../common.php');
 
 function checkMail() {
-	global $config, $sql;
+	global $config, $sql, $t_user, $t_entry;
 	// Login to gmail inbox
 	$hostname = '{imap.gmail.com:993/imap/ssl}INBOX';
 	$username = $config['email_username'];
@@ -20,19 +20,22 @@ function checkMail() {
 			print "Got " . count($emails) . " email(s)\n";
 
 			foreach($emails as $uid) {
+				print "Processing Email $uid) ";
 				$header = imap_headerinfo($inbox, $uid);
-				$body = htmlentities(imap_fetchbody($inbox, $uid, 1));
-				$structure = imap_fetchstructure($inbox, $uid);
-				
-				$subject = $header->subject;
-				$from = $header->from[0]->mailbox.'@'.$header->from[0]->host;
+				if($header) {
+					$body = htmlentities(imap_fetchbody($inbox, $uid, 1));
+					$structure = imap_fetchstructure($inbox, $uid);
+					
+					$subject = $header->subject;
+					$from = $header->from[0]->mailbox.'@'.$header->from[0]->host;
 
-				$success = createEntry($from, $body, $subject);
-				
-				if($success) {
-					// imap_delete($inbox, $uid); // Delete the Emails. Are you SURE?!
-					imap_mail_move($inbox,$uid,"Done");
-					print "$from : $subject\n";
+					$success = parseEmail($from, $body, $subject);
+					
+					if($success) {
+						// imap_delete($inbox, $uid); // Delete the Emails. Are you SURE?!
+						imap_mail_move($inbox,$uid,"Done");
+						print "$from : $subject\n";
+					}
 				}
 			}
 		}
@@ -43,17 +46,17 @@ function checkMail() {
 
 
 function parseEmail($from, $body, $subject) {
-	global $sql;
+	global $t_user, $t_entry;
 
-	$user_id = $sql->getOne("SELECT id FROM User WHERE email='$from'");
+	$user = $t_user->where(array('email'=>$from))->get('assoc');
 
 	$date_raw = str_replace(array("What Happened on ",'Re: '), '', $subject);
 	$date = date('Y-m-d', strtotime($date_raw));
 
-	if(!$body) return 0;
+	if(!$body or !$date_raw) return 0;
 
-	createEntry($body, $user_id, $date, $subject);
-
+	$success = $t_entry->create($user['id'], $body, $date, $subject);
+	return $success;
 }
 
 //createEntry('binnyva@gmail.com', "Hello world. <br /> How are you?\n#old #tag-test #tagger LOCKED",''); // :DEBUG:

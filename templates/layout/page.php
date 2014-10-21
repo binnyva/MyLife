@@ -26,7 +26,7 @@
 <input type="text" name="search" id="search" placeholder="Search..." value="" class="form-control" />
 <span class="input-group-btn"><button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button></span>
 </form></li>
-		<li><a class="calendar with-icon" href="calender.php"> Calender</a></li>
+		<li><a class="calendar with-icon" href="calendar.php"> Calendar</a></li>
 		<li><a class="previous with-icon" href="day.php?date=<?php echo date('Y-m-d', strtotime('Yesterday')); ?>"> Yesterday</a></li>
 		<li><a class="add with-icon" href="day.php?date=<?php echo date('Y-m-d'); ?>"> Today</a></li>
 		</ul>

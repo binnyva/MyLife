@@ -118,7 +118,9 @@ ul.horizontal li {
 	border-left:1px solid #b2dbfb;
 	border-radius: 5px 0 0 5px;
 }
-
+.meta {
+	margin-bottom:10px;
+}
 #content {
 	margin-top:80px;
 }
@@ -129,6 +131,15 @@ ul.horizontal li {
 
 .entry p {
 	font-size: 120%;
-	line-height: 110%;
+	line-height: 120%;
 	margin-left: 10px;
+}
+.tags {
+	padding:0;
+	list-style: none;
+	display: inline;
+}
+.tags li {
+	display: inline;
+	padding-right: 10px;
 }
