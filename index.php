@@ -3,6 +3,8 @@ require("./common.php");
 
 if(isset($QUERY['entry_id'])) {
 	$entries = array($t_entry->getEntry($QUERY['entry_id']));
+}elseif(isset($QUERY['date'])) {
+	$entries = $t_entry->find(array('date'=>$QUERY['date'], 'user_id'=> $_SESSION['user_id']));
 } else {
 	$entries = $t_entry->getLatest();
 }
@@ -24,7 +26,7 @@ function showTags($tags) {
 	if($tags) {
 		print ' | Tags: <ul class="tags">';
 		foreach ($tags as $id => $tag) {
-			print "<li><a href='$config[home_url]tag.php?tag=$tag'>$tag</a></li>";
+			print "<li><a class='with-icon tag' href='$config[home_url]tag.php?tag=$tag'>$tag</a></li>";
 		}
 		print '</ul>';
 	}

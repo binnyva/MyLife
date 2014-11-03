@@ -64,6 +64,6 @@ class Entry extends DBTable {
 	}
 
 	function getLatest() {
-		return $this->where(array("user_id" => $_SESSION['user_id']))->sort("`date` DESC")->limit(0,10)->get();
+		return $this->where(array("user_id" => $_SESSION['user_id']))->sort("`date` DESC")->limit(10)->get();
 	}
 }

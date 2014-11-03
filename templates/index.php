@@ -2,6 +2,7 @@
 <div id="all-entries">
 
 <?php foreach ($entries as $entry) { ?>
+
 <div class="entry" id="entry-<?php echo $entry['id'] ?>">
 <h4>Entry for <?php echo date('d\<\s\u\p\>S\<\/\s\u\p\> M, Y', strtotime($entry['date'])); ?></h4>
 
@@ -21,5 +22,13 @@
 </form>
 
 </div>
+
+<?php if(count($entries) == 1) { ?>
+<div class="container">
+<ul class="btn-group btn-group-justified center-block">
+<li class="btn btn-default"><a class="previous previous-day with-icon" href="index.php?date=<?php echo date('Y-m-d', strtotime($entry['date']) - (60*60*24)); ?>">Previous Day(<?php echo date('dS M', strtotime($entry['date']) - (60*60*24)); ?>)</a></li>
+<li class="btn btn-default"><a class="next next-day with-icon" href="index.php?date=<?php echo date('Y-m-d', strtotime($entry['date']) + (60*60*24)); ?>">Next Day(<?php echo date('dS M', strtotime($entry['date']) + (60*60*24)); ?>)</a></li></ul>
+</div>
+<?php } ?>
 <?php } ?>
 </div>
