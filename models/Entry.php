@@ -1,10 +1,13 @@
 <?php
 class Entry extends DBTable {
+	public $pager;
+
 	function __construct() {
        parent::__construct('Entry');
     }
 
-    function create($user_id, $body, $date, $subject='') {
+    /// Create a Journal entry. 
+    function create($user_id, $body, $date, $subject='', $locked = 0) {
 		// Check if already there.
 		$exists = $this->find("user_id=$user_id AND `date`='$date'");
 		if($exists) {
@@ -13,7 +16,6 @@ class Entry extends DBTable {
 			return $exists[0]['id'];
 		}
 
-		$locked = 0;
 		if(strpos($body, 'LOCKED') !== false) $locked = 1;
 
 		$this->field = array(
@@ -31,6 +33,7 @@ class Entry extends DBTable {
 		return $insert_id;
 	}
 
+	/// Edit an existing journal entry.
 	function edit($entry_id, $body, $user_id=0, $date='',  $subject='') {
 		$locked = 0;
 		if(strpos($body, 'LOCKED') !== false) $locked = 1;
@@ -59,11 +62,38 @@ class Entry extends DBTable {
 		return keyFormat($data, 'date');
 	}
 
+	/// Returns the Journal entry whos ID has been given as the argument.
 	function getEntry($entry_id) {
 		return $this->where(array("user_id"=>$_SESSION['user_id'], 'id'=> $entry_id))->get('assoc');
 	}
 
+	/// Returns all the journal entries tagged with a specific tag.
+	function getByTag($tag) {
+		global $sql;
+		$tag = strtolower($tag);
+		$this->pager = new SqlPager("SELECT E.* FROM Entry E 
+					INNER JOIN EntryTag ET ON ET.entry_id=E.id 
+					INNER JOIN Tag T ON T.id=ET.tag_id 
+						WHERE LCASE(T.name)='$tag' AND T.user_id=$_SESSION[user_id] AND E.user_id=$_SESSION[user_id] 
+						ORDER BY `date` DESC");
+
+		return $this->pager->getPage();
+	}
+
+	function getTags($entry_id) {
+		global $sql;
+		return $sql->getById("SELECT T.id,T.name FROM Tag T INNER JOIN EntryTag ET ON T.id=ET.tag_id WHERE ET.entry_id=$entry_id");
+	}
+
+	function search($term) {
+		$this->pager = new SqlPager("SELECT * FROM Entry WHERE user_id=$_SESSION[user_id] AND body LIKE '%$term%' ORDER BY `date` DESC");
+
+		return $this->pager->getPage();
+	}
+
 	function getLatest() {
-		return $this->where(array("user_id" => $_SESSION['user_id']))->sort("`date` DESC")->limit(10)->get();
+		$this->pager = new SqlPager("SELECT * FROM Entry WHERE user_id=$_SESSION[user_id] ORDER BY `date` DESC");
+
+		return $this->pager->getPage();
 	}
 }

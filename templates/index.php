@@ -4,17 +4,21 @@
 <?php foreach ($entries as $entry) { ?>
 
 <div class="entry" id="entry-<?php echo $entry['id'] ?>">
-<h4>Entry for <?php echo date('d\<\s\u\p\>S\<\/\s\u\p\> M, Y', strtotime($entry['date'])); ?></h4>
+<h4><a href="index.php?entry_id=<?php echo $entry['id'] ?>">Entry for <?php echo date('d\<\s\u\p\>S\<\/\s\u\p\> M, Y', strtotime($entry['date'])); ?></a></h4>
 
 <div class="meta">
-<a href="#" class="edit-entry edit with-icon" data-entry-id="<?php echo $entry['id'] ?>">Edit Entry</a>
-<?php showTags(getTags($entry['id'])); ?>
+<?php if(empty($search)) { ?><a href="#" class="edit-entry edit with-icon" data-entry-id="<?php echo $entry['id'] ?>">Edit Entry</a><?php } ?>
+<?php showTags($t_entry->getTags($entry['id'])); ?>
 </div>
 
 <form action="ajax/save_entry.php" class="ajaxify" method="post">
 <div class="body" id="entry-body-<?php echo $entry['id'] ?>">
 
-<?php echo para($entry['body']); ?>
+<?php if(!empty($search)) {
+	echo getSnippet($search, $entry['body']);
+} else {
+	echo para($entry['body']);
+}  ?>
 
 </div>
 <input type="hidden" name="entry_id" value="<?php echo $entry['id'] ?>" />
@@ -32,3 +36,24 @@
 <?php } ?>
 <?php } ?>
 </div>
+
+<?php if($t_entry->pager and $t_entry->pager->total_pages > 1) { ?>
+<nav>
+<ul class="pagination center-block">
+<?php
+$t_entry->pager->link_template = '<li><a href="%%PAGE_LINK%%" class="%%CLASS%%">%%TEXT%%</a></li>' . "\n";
+$t_entry->pager->text['current_page_indicator']['left'] = '<li class="active"><a href="#" class="sp-current">';
+$t_entry->pager->text['current_page_indicator']['right'] = '</a></li>';
+$t_entry->pager->text['previous'] = '<span class="glyphicon glyphicon-step-backward"></span>';
+$t_entry->pager->text['next'] = '<span class="glyphicon glyphicon-forward"></span>';
+$t_entry->pager->text['first'] = '<span class="glyphicon glyphicon-step-backward"></span>';
+$t_entry->pager->text['last'] = '<span class="glyphicon glyphicon-step-forward"></span>';
+$t_entry->pager->page_link = 'index.php';
+if(!empty($search)) $t_entry->pager->page_link = 'search.php?search='.$search;
+print $t_entry->pager->getLink("first") . $t_entry->pager->getLink("back");
+$t_entry->pager->printPager(); 
+print $t_entry->pager->getLink("next") . $t_entry->pager->getLink("last");
+?>
+</ul>
+</nav><br /><br />
+<?php } ?>

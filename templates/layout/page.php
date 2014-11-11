@@ -23,7 +23,7 @@
 	<div class="collapse navbar-collapse">
 		<ul class="nav navbar-nav pull-right">
 			<li><form action="search.php" method="post" id="search-area" class="input-group input-group-sm">
-<input type="text" name="search" id="search" placeholder="Search..." value="" class="form-control" />
+<input type="text" name="search" id="search" placeholder="Search..." value="<?php echo i($QUERY, 'search') ?>" class="form-control" />
 <span class="input-group-btn"><button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button></span>
 </form></li>
 		<li><a class="calendar with-icon" href="calendar.php"> Calendar</a></li>

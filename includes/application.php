@@ -66,9 +66,22 @@ function saveTag($entry_id, $tag) {
 	));
 }
 
+function showTags($tags) {
+	global $config;
+
+	if($tags) {
+		print ' | Tags: <ul class="tags">';
+		foreach ($tags as $id => $tag) {
+			print "<li><a class='with-icon tag' href='$config[home_url]tag.php?tag=$tag'>$tag</a></li>";
+		}
+		print '</ul>';
+	}
+}
 
 // This function will convert the wordwrapped text that Gmail makes to more appropiat HTML formatted text.
 function para($text) {
+	if(stripos($text,'<p>') !== false or stripos($text,'<br') !== false ) return $text; // Its already HTML format. No further formatting necessary.
+
 	$lines = explode("\n", $text);
 
 	// First remove all the singular \n's. Do that by removing every \n and putting it back in if the line is empty.
