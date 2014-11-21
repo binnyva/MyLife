@@ -18,10 +18,12 @@ function checkMail() {
 		$in = array();
 		if($emails) {
 			print "Got " . count($emails) . " email(s)\n";
+			$success = array();
 
 			foreach($emails as $uid) {
 				print "Processing Email $uid) ";
 				$header = imap_headerinfo($inbox, $uid);
+				//dump($header);exit;
 				if($header) {
 					$body = htmlentities(imap_fetchbody($inbox, $uid, 1));
 					$structure = imap_fetchstructure($inbox, $uid);
@@ -29,15 +31,22 @@ function checkMail() {
 					$subject = $header->subject;
 					$from = $header->from[0]->mailbox.'@'.$header->from[0]->host;
 
-					$success = parseEmail($from, $body, $subject);
-					
-					if($success) {
-						// imap_delete($inbox, $uid); // Delete the Emails. Are you SURE?!
-						imap_mail_move($inbox,$uid,"Done");
-						print "$from : $subject\n";
-					}
+					$success[$uid] = parseEmail($from, $body, $subject);
+					print "$from : $subject\n";
 				}
 			}
+
+			print "Marking all as done: ";
+			// Don't put this inside the previous forloop as that will mess the indexing.
+			foreach ($emails as $uid) {
+				if($success[$uid]) {
+					// imap_delete($inbox, $uid); // Delete the Emails. Are you SURE?!
+					imap_mail_move($inbox,$uid,"Done");
+					print ".";
+				}
+
+			}
+			print " Done\n";
 		}
 	}
 
@@ -50,6 +59,10 @@ function parseEmail($from, $body, $subject) {
 
 	$user = $t_user->where(array('email'=>$from))->get('assoc');
 
+	if(!$user) {
+		print "Cant find any user with the email '$from' in the database.\n";
+		return false;
+	}
 	$date_raw = str_replace(array("What Happened on ",'Re: '), '', $subject);
 	$date = date('Y-m-d', strtotime($date_raw));
 
