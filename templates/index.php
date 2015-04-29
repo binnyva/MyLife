@@ -6,6 +6,13 @@
 <div class="entry" id="entry-<?php echo $entry['id'] ?>">
 <h4><a href="index.php?entry_id=<?php echo $entry['id'] ?>">Entry for <?php echo date('d\<\s\u\p\>S\<\/\s\u\p\> M, Y', strtotime($entry['date'])); ?></a></h4>
 
+<?php
+if($entry['locked'] and empty($_SESSION['auth_user'])) {
+	print "<p>Entry Locked: <a href='$config[site_url]user/login.php'>Enter Password</a> to continue...</p>";
+	continue;
+}
+?>
+
 <div class="meta">
 <?php if(empty($search)) { ?><a href="#" class="edit-entry edit with-icon" data-entry-id="<?php echo $entry['id'] ?>">Edit Entry</a><?php } ?>
 <?php showTags($t_entry->getTags($entry['id'])); ?>
@@ -22,7 +29,12 @@
 
 </div>
 <input type="hidden" name="entry_id" value="<?php echo $entry['id'] ?>" />
-<input type="submit" name="action" value="Save" class="btn btn-primary entry-save" id="entry-save-<?php echo $entry['id'] ?>" />
+
+<div id="entry-save-<?php echo $entry['id'] ?>" class="entry-save">
+<label for="date">Date</label> &nbsp; <input type="text" name="date" value="<?php echo $entry['date'] ?>" /><br />
+
+<input type="submit" name="action" value="Save" class="btn btn-primary" id="entry-save-<?php echo $entry['id'] ?>-button" />
+</div>
 </form>
 
 </div>

@@ -57,14 +57,18 @@ class Entry extends DBTable {
 
 
 	function getMonth($month) {
-		$data = $this->where("DATE_FORMAT(`date`,'%m-%Y')='$month' AND user_id=$_SESSION[user_id]")->get();
-
+		$data = $this->where("DATE_FORMAT(`date`,'%m-%Y')='$month' AND user_id='$_SESSION[user_id]'")->get();
 		return keyFormat($data, 'date');
 	}
 
 	/// Returns the Journal entry whos ID has been given as the argument.
 	function getEntry($entry_id) {
 		return $this->where(array("user_id"=>$_SESSION['user_id'], 'id'=> $entry_id))->get('assoc');
+	}
+
+	/// Returns the entries that was made on the given date.
+	function getByDate($date) {
+		return $this->find(array("user_id"=>$_SESSION['user_id'], 'date'=> $date));
 	}
 
 	/// Returns all the journal entries tagged with a specific tag.

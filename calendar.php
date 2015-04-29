@@ -3,8 +3,10 @@ include('common.php');
 $calendar = new Calendar('day');
 
 $curmonth = ($calendar->month < 10) ? "0$calendar->month" : $calendar->month;
+$curyear  = $calendar->year;
+
 //Get all the tasks and reminders for a whole month
-$all_entries = $t_entry->getMonth($curmonth. "-".date('Y')); 
+$all_entries = $t_entry->getMonth($curmonth. "-".$curyear); 
 
 render();
 

@@ -2,6 +2,20 @@
 $t_user = new DBTable("User");
 $t_entry = new Entry;
 
+if((strpos($config['PHP_SELF'], '/user/') === false) 
+	and (strpos($config['PHP_SELF'], '/about/') === false)) checkUser();
+
+function checkUser() {
+	global $config;
+
+	if(!isset($_SESSION['user_id'])) {
+		$_SESSION['user_id'] = $config['single_user'];
+	}
+	
+	if((!isset($_SESSION['user_id']) or !$_SESSION['user_id']))
+		showMessage("Please login to use this feature", $config['site_url'] . 'user/login.php', "error");
+}
+
 function email($to, $subject, $body, $from = '') {
 	//return true; //:DEBUG:
 	global $config;
@@ -72,7 +86,7 @@ function showTags($tags) {
 	if($tags) {
 		print ' | Tags: <ul class="tags">';
 		foreach ($tags as $id => $tag) {
-			print "<li><a class='with-icon tag' href='$config[home_url]tag.php?tag=$tag'>$tag</a></li>";
+			print "<li><a class='with-icon tag' href='$config[home_url]index.php?tag=$tag'>$tag</a></li>";
 		}
 		print '</ul>';
 	}
