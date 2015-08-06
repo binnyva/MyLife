@@ -3,6 +3,7 @@ $t_user = new DBTable("User");
 $t_entry = new Entry;
 
 if((strpos($config['PHP_SELF'], '/user/') === false) 
+	and (strpos($config['PHP_SELF'], '/system/') === false) 
 	and (strpos($config['PHP_SELF'], '/about/') === false)) checkUser();
 
 function checkUser() {

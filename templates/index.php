@@ -7,10 +7,10 @@
 <h4><a href="index.php?entry_id=<?php echo $entry['id'] ?>">Entry for <?php echo date('d\<\s\u\p\>S\<\/\s\u\p\> M, Y', strtotime($entry['date'])); ?></a></h4>
 
 <?php
-if($entry['locked'] and empty($_SESSION['auth_user'])) {
-	print "<p>Entry Locked: <a href='$config[site_url]user/login.php'>Enter Password</a> to continue...</p>";
-	continue;
-}
+// if($entry['locked'] and empty($_SESSION['auth_user'])) {
+// 	print "<p>Entry Locked: <a href='$config[site_url]user/login.php'>Enter Password</a> to continue...</p>";
+// 	continue;
+// }
 ?>
 
 <div class="meta">

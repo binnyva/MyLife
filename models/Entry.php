@@ -68,7 +68,9 @@ class Entry extends DBTable {
 
 	/// Returns the entries that was made on the given date.
 	function getByDate($date) {
-		return $this->find(array("user_id"=>$_SESSION['user_id'], 'date'=> $date));
+		$entries = $this->find(array("user_id"=>$_SESSION['user_id'], 'date'=> $date));
+
+		return $entries[0];
 	}
 
 	/// Returns all the journal entries tagged with a specific tag.

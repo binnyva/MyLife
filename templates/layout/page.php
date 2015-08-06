@@ -53,9 +53,9 @@ include($GLOBALS['template']->template);
 <!-- End Content -->
 </div>
 
-<script src="<?php $config['site_url'] ?>bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
-<script src="<?php $config['site_url'] ?>bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="<?php $config['site_url'] ?>js/application.js" type="text/javascript"></script>
+<script src="<?php echo $config['site_url'] ?>bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
+<script src="<?php echo $config['site_url'] ?>bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="<?php echo $config['site_url'] ?>js/application.js" type="text/javascript"></script>
 <script type="text/javascript" src="<?php echo $config['home_url'] ?>js/library/tinymce/tinymce.min.js"></script>
 <script type="text/javascript" src="<?php echo $config['home_url'] ?>js/library/tinymce/jquery.tinymce.min.js"></script>
 

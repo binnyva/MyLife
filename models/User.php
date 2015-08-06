@@ -4,25 +4,29 @@ class User extends DBTable {
 	
 	//Configs
 	var $cookie_expire = 0;
+	var $cookie_prefix_for_site = '';
 	
 	//The constructor
 	//Get the details of the current user on every page load.
 	function User() {
-		global $sql;
+		global $sql, $config;
+		$this->cookie_prefix_for_site = unformat($config['site_title']) . '_';
 		$this->cookie_expire = time() + (60*60*24*30);//Will expire in 30 days
 		parent::__construct("User");
-		
+
 		if(isset($_SESSION['user_id']) and isset($_SESSION['user_name'])) {
 			$this->setCurrentUser($_SESSION['user_id'], $_SESSION['user_name']);
 			return; //User logged in already.
 		}
 		
 		//This is a User who have enabled the 'Remember me' Option - so there is a cookie in the users system
-		if(isset($_COOKIE['username']) and $_COOKIE['username'] and isset($_COOKIE['password_hash'])) {
-			$user_details = $sql->getAssoc("SELECT id,name FROM User WHERE username='$_COOKIE[username]' AND MD5(CONCAT(password,'#c*2u!'))='$_COOKIE[password_hash]'");
+		if(isset($_COOKIE[$this->cookie_prefix_for_site.'username']) and $_COOKIE[$this->cookie_prefix_for_site.'username'] and isset($_COOKIE[$this->cookie_prefix_for_site.'password_hash'])) {
+
+			$user_details = $sql->getAssoc("SELECT id,name FROM User WHERE username='" . $_COOKIE[$this->cookie_prefix_for_site . 'username'] . "' "
+											. " AND MD5(CONCAT(password,'#c*2u!'))='" . $_COOKIE[$this->cookie_prefix_for_site . 'password_hash'] . "'");
 		
 			if($user_details) { //If it is valid, store it in session
-				$this->setCurrentUser($user_details['id'], $_COOKIE['username'], $user_details['name']);
+				$this->setCurrentUser($user_details['id'], $_COOKIE[$this->cookie_prefix_for_site . 'username'], $user_details['name']);
 				
 			} else { //The user details in the cookie is invalid - force a logout to clear cookie
 				$this->logout();
@@ -30,7 +34,6 @@ class User extends DBTable {
 		} else {
 			unset($_SESSION['user_id']);
 			unset($_SESSION['user_name']);
-			unset($_SESSION['auth_user']);
 		}
 	}
 
@@ -43,7 +46,7 @@ class User extends DBTable {
 		
 		$user_details = $sql->getAssoc("SELECT id,name FROM User WHERE username='$username' AND password='$password'");
 		if(!$user_details) { //Query did not run correctly
-			showMessage("Invalid Username/Password", "login.php", "error");
+			showMessage("Invalid Username/Password", "user/login.php", "error");
 
 		} else {
 			//Store the necessy stuff in the sesson
@@ -51,8 +54,8 @@ class User extends DBTable {
 
 			//Keep some token in the cookie so as to login the user automatically the next time
 			if($remember) {
-				setcookie('username', $username, $this->cookie_expire, '/');
-				setcookie('password_hash', md5($password.'#c*2u!'), $this->cookie_expire,'/');
+				setcookie($this->cookie_prefix_for_site . 'username', $username, $this->cookie_expire, '/');
+				setcookie($this->cookie_prefix_for_site . 'password_hash', md5($password.'#c*2u!'), $this->cookie_expire,'/');
 			}
 		}
 		
@@ -65,15 +68,13 @@ class User extends DBTable {
 	function logout() {
 		$_SESSION['user_id'] = '';
 		unset($_SESSION['user_id']);
-		unset($_SESSION['auth_user']);
-		dump($_SESSION);
 		
 		//Remove the remember me cookies as well.
-		if(isset($_COOKIE['username']) or isset($_COOKIE['password_hash'])) {
-			setcookie('username','',time()-1,'/');
-			setcookie('password_hash','',time()-1,'/');
-			unset($_COOKIE['username']);
-			unset($_COOKIE['password_hash']);
+		if(isset($_COOKIE[$this->cookie_prefix_for_site . 'username']) or isset($_COOKIE[$this->cookie_prefix_for_site . 'password_hash'])) {
+			setcookie($this->cookie_prefix_for_site . 'username','',time()-1,'/');
+			setcookie($this->cookie_prefix_for_site . 'password_hash','',time()-1,'/');
+			unset($_COOKIE[$this->cookie_prefix_for_site . 'username']);
+			unset($_COOKIE[$this->cookie_prefix_for_site . 'password_hash']);
 		}
 	}
 	
@@ -82,7 +83,6 @@ class User extends DBTable {
 	 */
 	function setCurrentUser($user_id, $username = '', $real_name = '') {
 		if($user_id > 0) {
-			$_SESSION['auth_user'] = true;
 			$_SESSION['user_id'] = $this->id = $user_id;
 			$_SESSION['user_name'] = ($real_name) ? $real_name : $username ;
 		}
@@ -91,7 +91,7 @@ class User extends DBTable {
 	/**
 	 * Registers the user with the details provided in the arguments. If the specified username is already taken, an error will be shown.
 	 */
-	function register($username, $password, $name, $email, $url) {
+	function register($username, $password, $name, $email) {
 		global $sql, $QUERY;
 		
 		//Check if the username is already taken.
@@ -114,7 +114,6 @@ class User extends DBTable {
 				$this->field['password'] = $password;
 				$this->field['name'] = $name;
 				$this->field['email'] = $email;
-				$this->field['url'] = $url;
 				$this->field['added_on'] = 'NOW()';
 				$id = $this->save();
 				$this->setCurrentUser($id, $username, $name);
@@ -123,6 +122,8 @@ class User extends DBTable {
 		} else {
 			$QUERY['error'] = "User with username '$username' already exists.";
 		}
+
+		return false;
 	}
 	
 	/**
@@ -144,7 +145,6 @@ class User extends DBTable {
 			if($password) $this->field['password'] = $password;
 			$this->field['name'] = $name;
 			$this->field['email'] = $email;
-			$this->field['url'] = $url;
 	
 			return $this->save();
 		}

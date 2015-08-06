@@ -1,5 +1,6 @@
 <?php
-require('../common.php');
+include("../common.php");
+$_SESSION['user_id'] = 1;
 
 function checkMail() {
 	global $config, $sql, $t_user, $t_entry;
@@ -73,5 +74,5 @@ function parseEmail($from, $body, $subject) {
 }
 
 //createEntry('binnyva@gmail.com', "Hello world. <br /> How are you?\n#old #tag-test #tagger LOCKED",''); // :DEBUG:
-
+print "Hi";
 checkMail();
