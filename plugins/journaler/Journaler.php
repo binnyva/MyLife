@@ -14,6 +14,26 @@ if(empty($argv[1])) {
 }
 
 $journal = '';
+$locked = false;
+
+$tiker = new Sql("Project_Tiker");
+// Things I did that day...
+$things_i_did = $tiker->getAll("SELECT T.id,T.name,D.from_time,D.to_time FROM Task T INNER JOIN Duration D ON T.id=D.task_id WHERE DATE(D.from_time)='$date' OR DATE(D.to_time)='$date' ORDER BY D.from_time");
+foreach($things_i_did as $task) {
+	if($task['id'] == 7032) { // At Mad office.
+
+		$from = date("H:i", strtotime($task['from_time']));
+		$to = date("h:i", strtotime($task['to_time']));
+		$journal .= any(
+				"Was at the office from " . $from . " to " . $to,
+				"Reached the office at " . $from . " - was there till " . $to,
+				"At the office from " . $from . " to " . $to,
+				"Worked from $from to $to"
+			);
+
+		$journal .= ".\n";
+	}
+}
 
 $sql = new Sql('Data');
 
@@ -69,24 +89,54 @@ $flags = array(
 	'LOCKED'		=> array('count'=>0, 'keywords' => array('smoke up','smoked up','weed','got high','had sex','make out', 'made out','kissed','slept with')),
 );
 
-foreach($met as $m) {
-	$journal .= any("Met ", "Met up with ", "Met with ", "Meeting with ", "Saw ");
+$friendlee_journal = '';
+$friendlee_tags = array();
 
+foreach($met as $m) {
 	$people = $sql->getAll("SELECT P.nickname,P.sex FROM Person P 
 		INNER JOIN PersonConnection PC ON P.id=PC.person_id 
 		WHERE PC.connection_id='$m[id]'");
 
-	while($person = array_pop($people)) {
-		$name_parts = explode(" ", $person['nickname']);
-		$journal .= reset($name_parts);
-		if(count($people) > 1) $journal .= ', ';
-		elseif(count($people) == 1) $journal .= ' and ';
+	// Specific cases
+	if($people[0]['nickname'] == 'A') {
+		$location = 'her place';
+		if($m['location'] and $m['location'] != 'Arathi\'s place') {
+			$place = $m['location'];
+		}
+
+		$friendlee_journal .= any("Met A at $location", "Went to meet A at $location", "Saw A at $location") . ". ";
+		$friendlee_tags[] = '#fun';
+
+	} else {
+
+		$people_i_met = '';
+		while($person = array_pop($people)) {
+			$name_parts = explode(" ", $person['nickname']);
+			$first_name = reset($name_parts);
+
+			// if($first_name == 'A') $first_name = 'Arathi'; // :HARDCODE:
+			$people_i_met .= $first_name;
+			if(count($people) > 1) $people_i_met .= ', ';
+			elseif(count($people) == 1) $people_i_met .= ' and ';
+		}
+
+		// We have a location
+		if($m['location']) {
+			if($m['location'] == 'Crib' or $m['location'] == 'Cabin') $m['location'] = 'my place';
+
+			$friendlee_journal .= any(
+						any("Met ", "Met up with ", "Met with ", "Meeting with ", "Saw ") . $people_i_met . " at $m[location]", 
+						any("I went", "Went") . " to $m[location] to ".any("see ", "meet ", "meet with ") . $people_i_met 
+					) . ". ";
+		}
+		else {
+			$friendlee_journal .= any("Met ", "Met up with ", "Met with ", "Meeting with ", "Saw ") . $people_i_met. '. ';
+		}
 	}
-	if($m['location']) $journal .= " at " . $m['location'] . ".";
-	else $journal .= ".";
+
 	if($m['note']) {
-		$journal .= " " . $m['note'];
-		if(!preg_match('/[\.\?\!]\s*$/', $m['note'])) $journal .= ".";
+		$friendlee_journal .= trim($m['note']);
+		if(!preg_match('/[\.\?\!]\s*$/', $m['note'])) $friendlee_journal .= ". ";
 
 		// Matches the various meeting against the set flags.
 		$note = strtolower($m['note']);
@@ -161,21 +211,24 @@ foreach($met as $m) {
 
 	}
 
-	$journal .= "\n";
+	$friendlee_journal .= "\n";
 
 	foreach ($flags as $key => $data) {
 		if($data['count']) {
 			if($key == 'LOCKED') continue;
 
-			$journal .= "#" . $key . ' ';
+			$friendlee_tags[] = "#" . $key;
 		}
 	}
 
 	if($flags['LOCKED']['count']) {
-		$journal .= "\nLOCKED";
+		$locked = true;
 	}
 
-	$journal .= "\n";
+	$friendlee_journal .= "\n";
 }
 
-print $journal;
+print trim($journal . $friendlee_journal);
+
+if($friendlee_tags) print "\n\n" . implode(' ', $friendlee_tags);
+if($locked) print "\n\nLOCKED";

@@ -1,4 +1,4 @@
-<h3>Entry for <?php echo date('d\<\s\u\p\>S\<\/\s\u\p\> M, Y', strtotime($entry['date'])); ?></h3>
+<h3>Entry for <?php echo date('d\<\s\u\p\>S\<\/\s\u\p\> M, Y (l)', strtotime($entry['date'])); ?></h3>
 
 <form action="ajax/save_entry.php" class="ajaxify" method="post">
 <div class="body">
@@ -13,4 +13,7 @@
 </div>
 </form>
 <br />
-<input type="button" class="btn btn-warning" value="Guess What I did" id="guess" />
+<!-- Should go in to the journaler plugin -->
+<input type="button" class="btn btn-success" value="Guess What I did" id="guess" />
+<input type="button" class="btn btn-warning" value="Show What I did" id="show" />
+<div id="what-i-did"></div>

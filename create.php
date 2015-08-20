@@ -3,7 +3,7 @@ require("./common.php");
 
 $entry = array(
 	'id'	=> 0,
-	'date'	=> $QUERY['date'],
+	'date'	=> i($QUERY, 'date', date("Y-m-d", strtotime('yesterday'))),
 	'body'	=> '',
 );
 if(isset($QUERY['date'])) { // Entry on given date
