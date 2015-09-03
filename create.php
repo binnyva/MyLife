@@ -1,14 +1,16 @@
 <?php
 require("./common.php");
 
+$date = i($QUERY, 'date', date("Y-m-d", strtotime('yesterday')));
 $entry = array(
 	'id'	=> 0,
-	'date'	=> i($QUERY, 'date', date("Y-m-d", strtotime('yesterday'))),
+	'date'	=> $date,
 	'body'	=> '',
 );
-if(isset($QUERY['date'])) { // Entry on given date
-	$entry_option = $t_entry->getByDate($QUERY['date']);
+if($date) { // Entry on given date
+	$entry_option = $t_entry->getByDate($date);
 	if($entry_option) $entry = $entry_option;
 }
 
+$template->addResource("library/ajaxify.js", "js");
 render();

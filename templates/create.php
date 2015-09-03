@@ -10,6 +10,7 @@
 <label for="date">Date</label> &nbsp; <input type="text" name="date" id="date" value="<?php echo $entry['date'] ?>" /><br />
 <input type="hidden" name="entry_id" value="<?php echo $entry['id'] ?>" />
 <input type="submit" name="action" value="Save" class="btn btn-primary" id="entry-save-button" />
+<div id="ajaxify-message"></div>
 </div>
 </form>
 <br />

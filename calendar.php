@@ -17,5 +17,6 @@ function day($year, $month, $day) {
 	$this_day = "$year-$month-$day";
 
 	if(!empty($all_entries[$this_day])) print "<a href='index.php?entry_id=".$all_entries[$this_day]['id']."'>Entry</a>";
+	elseif($this_day < date('Y-m-d')) print "<a href='create.php?date=".$this_day."' class='with-icon edit'>Create Entry...</a>";
 }
 

@@ -12,7 +12,7 @@ class Entry extends DBTable {
 		$exists = $this->find("user_id=$user_id AND `date`='$date'");
 		if($exists) {
 			// Entry for the date exists. Don't Enter again
-			print "Entry for $date Exists\n";
+			// print "Entry for $date Exists\n";
 			return $exists[0]['id'];
 		}
 
@@ -70,7 +70,8 @@ class Entry extends DBTable {
 	function getByDate($date) {
 		$entries = $this->find(array("user_id"=>$_SESSION['user_id'], 'date'=> $date));
 
-		return $entries[0];
+		if($entries) return $entries[0];
+		return array();
 	}
 
 	/// Returns all the journal entries tagged with a specific tag.

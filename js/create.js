@@ -18,7 +18,11 @@ function getData (url, id) {
 		"dataType": 'html',
 		"success": function(data){
 			//loaded(); 
-			if(id == "body") $("#" + id).val(data);
+			if(id == "body") {
+				// Make sure that if data is already there, it doesn't get overwritten.
+				if($("#body").val()) if(!confirm("Entry already has some content. Replace with auto-generated content?")) return;
+				$("#body").val(data);
+			}
 			else $("#" + id).html(data);
 			showMessage(data);
 		},

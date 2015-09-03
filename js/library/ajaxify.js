@@ -2,6 +2,7 @@
 $.ajaxify = {};
 $.ajaxify.init = function() {
 	$("a.ajaxify").click($.ajaxify.handleClick);
+	$("form.ajaxify").submit($.ajaxify.handleSubmit);
 };
 
 $.ajaxify.handleRequest = function(ele, data) {
@@ -29,6 +30,15 @@ $.ajaxify.handleRequest = function(ele, data) {
 		} else {
 			alert("Attempt failed: " + data.error);
 		}
+	} else if(document.getElementById("ajaxify-message") && data ) {
+		if(data.success) {
+			$("#ajaxify-message").html(data.success);
+		} else {
+			$("#ajaxify-message").html(data.error);
+		}
+	} else {
+		if(data.success) alert(data.success);
+		else alert(data.error);
 	}
 }
 
@@ -51,6 +61,21 @@ $.ajaxify.handleClick = function(e) {
 		"url": url,
 		"dataType": 'json',
 		"success": function(data){loaded(); $.ajaxify.handleRequest(anchor, data);},
+		"error": function(data){loaded(); alert("Call Error: "+ data.error);},
+	});
+	return false;
+}
+
+$.ajaxify.handleSubmit = function(e) {
+	e.stopPropagation();
+
+	var url = $(this).attr("action");
+	loading();
+	$.ajax({
+		"url": url,
+		"data": $(this).serialize(),
+		"dataType": 'json',
+		"success": function(data){loaded(); $.ajaxify.handleRequest(this, data);},
 		"error": function(data){loaded(); alert("Call Error: "+ data.error);},
 	});
 	return false;
