@@ -1,6 +1,5 @@
 <?php
 include("../common.php");
-$user = new User;
 
 if(isset($_REQUEST['action']) and $_REQUEST['action'] == 'Login') {
 	if($user->login($QUERY['username'], $QUERY['password'], $QUERY['remember'])) {

@@ -53,3 +53,9 @@ table.calendar tr td.failed {
 table.calendar tr td.today {
 	background-color:#a4e1ff;
 }
+
+.tags {
+	margin:0;
+	padding:0;
+	list-style: none;
+}

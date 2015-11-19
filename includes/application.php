@@ -1,6 +1,6 @@
 <?php
-$t_user = new DBTable("User");
 $t_entry = new Entry;
+$user = new User;
 
 if((strpos($config['PHP_SELF'], '/user/') === false) 
 	and (strpos($config['PHP_SELF'], '/system/') === false) 
@@ -9,7 +9,7 @@ if((strpos($config['PHP_SELF'], '/user/') === false)
 function checkUser() {
 	global $config;
 
-	if(!isset($_SESSION['user_id'])) {
+	if(!isset($_SESSION['user_id']) and isset($config['single_user'])) {
 		$_SESSION['user_id'] = $config['single_user'];
 	}
 	

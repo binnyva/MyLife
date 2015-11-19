@@ -5,7 +5,7 @@ if(isset($QUERY['entry_id'])) { // Individual entry
 	$entries = array($t_entry->getEntry($QUERY['entry_id']));
 
 } elseif(isset($QUERY['date'])) { // Entry on given date
-	$entries = $t_entry->getByDate($QUERY['date']);
+	$entries = array($t_entry->getByDate($QUERY['date']));
 
 } elseif(isset($QUERY['tag'])) { // Entry by tag
 	$entries = $t_entry->getByTag($QUERY['tag']);

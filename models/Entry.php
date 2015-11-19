@@ -3,7 +3,7 @@ class Entry extends DBTable {
 	public $pager;
 
 	function __construct() {
-       parent::__construct('Entry');
+       parent::__construct('Entry E');
     }
 
     /// Create a Journal entry. 
@@ -55,10 +55,16 @@ class Entry extends DBTable {
 		return $entry_id;
 	}
 
-
 	function getMonth($month) {
-		$data = $this->where("DATE_FORMAT(`date`,'%m-%Y')='$month' AND user_id='$_SESSION[user_id]'")->get();
-		return keyFormat($data, 'date');
+		// Code to get the tags as well with one pull. Not working yet.
+		// $this->select('E.id','E.title','E.body','E.date','GROUP_CONCAT(",", T.name) AS tags');
+		// $this->join("EntryTag ET", "ET.entry_id=E.id", 'LEFT')->join("Tag T", "T.id=ET.tag_id", 'LEFT');
+		// $this->group('ET.entry_id');
+		
+		$data = $this->where("DATE_FORMAT(`date`,'%m-%Y')='$month' AND E.user_id='$_SESSION[user_id]'")->get();
+		$result = keyFormat($data, 'date');
+
+		return $result;
 	}
 
 	/// Returns the Journal entry whos ID has been given as the argument.

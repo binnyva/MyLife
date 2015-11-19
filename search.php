@@ -13,11 +13,11 @@ function getSnippet($keyword, $txt) {
 	$txt = strip_tags($txt);
 	$snippet='';
 	$span = 50;
-	preg_match_all("#(\W.{0,$span}\W)($keyword)(\W.{0,$span}\W)#i", "  $txt  ", $matches);
+	preg_match_all("/(\W.{0,$span}\W)($keyword)(\W.{0,$span}\W)/i", "  $txt  ", $matches);
 	foreach($matches[0] as $match) {
 		if (!$match = trim($match)) continue;
 		if (isset($snippet)) $snippet .= "$match..."; else $snippet = "...$match...";
 	}
-	$snippet = preg_replace("#($keyword)#i", '<mark>$1</mark>', $snippet);
+	$snippet = preg_replace("/($keyword)/i", '<mark>$1</mark>', $snippet);
 	return $snippet;
 }
