@@ -1,17 +1,14 @@
 
 <div id="all-entries">
 
-<?php foreach ($entries as $entry) { ?>
+<?php 
+$entry_count = 0; 
+foreach ($entries as $entry) { 
+	if(!$entry) continue; 
+	$entry_count++; ?>
 
 <div class="entry" id="entry-<?php echo $entry['id'] ?>">
 <h4><a href="index.php?entry_id=<?php echo $entry['id'] ?>">Entry for <?php echo date('d\<\s\u\p\>S\<\/\s\u\p\> M, Y', strtotime($entry['date'])); ?></a></h4>
-
-<?php
-// if($entry['locked'] and empty($_SESSION['auth_user'])) {
-// 	print "<p>Entry Locked: <a href='$config[site_url]user/login.php'>Enter Password</a> to continue...</p>";
-// 	continue;
-// }
-?>
 
 <div class="meta">
 <?php if(empty($search)) { ?><a href="#" class="edit-entry edit with-icon" data-entry-id="<?php echo $entry['id'] ?>">Edit Entry</a><?php } ?>
@@ -45,8 +42,12 @@
 <li class="btn btn-default"><a class="previous previous-day with-icon" href="index.php?date=<?php echo date('Y-m-d', strtotime($entry['date']) - (60*60*24)); ?>">Previous Day(<?php echo date('dS M', strtotime($entry['date']) - (60*60*24)); ?>)</a></li>
 <li class="btn btn-default"><a class="next next-day with-icon" href="index.php?date=<?php echo date('Y-m-d', strtotime($entry['date']) + (60*60*24)); ?>">Next Day(<?php echo date('dS M', strtotime($entry['date']) + (60*60*24)); ?>)</a></li></ul>
 </div>
-<?php } ?>
-<?php } ?>
+<?php }
+}
+
+if(!$entry_count) print "<div class='error with-icon'>No entry on that date. <a href='create.php?date=$QUERY[date]'>Create one</a>?</div>";
+?>
+
 </div>
 
 <?php if($t_entry->pager and $t_entry->pager->total_pages > 1) { ?>
