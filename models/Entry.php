@@ -94,6 +94,7 @@ class Entry extends DBTable {
 	}
 
 	function getTags($entry_id) {
+		if(!$entry_id) return array();
 		global $sql;
 		return $sql->getById("SELECT T.id,T.name,S.value AS color FROM Tag T 
 			INNER JOIN EntryTag ET ON T.id=ET.tag_id 
