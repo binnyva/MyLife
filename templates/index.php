@@ -15,7 +15,7 @@
 
 <div class="meta">
 <?php if(empty($search)) { ?><a href="#" class="edit-entry edit with-icon" data-entry-id="<?php echo $entry['id'] ?>">Edit Entry</a><?php } ?>
-<?php showTags($t_entry->getTags($entry['id'])); ?>
+<?php showTags($t_entry->getTags($entry['id']), ' | Tags: '); ?>
 </div>
 
 <form action="ajax/save_entry.php" class="ajaxify" method="post">

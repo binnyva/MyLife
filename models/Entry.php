@@ -3,7 +3,7 @@ class Entry extends DBTable {
 	public $pager;
 
 	function __construct() {
-       parent::__construct('Entry E');
+       parent::__construct('Entry');
     }
 
     /// Create a Journal entry. 
@@ -61,7 +61,7 @@ class Entry extends DBTable {
 		// $this->join("EntryTag ET", "ET.entry_id=E.id", 'LEFT')->join("Tag T", "T.id=ET.tag_id", 'LEFT');
 		// $this->group('ET.entry_id');
 		
-		$data = $this->where("DATE_FORMAT(`date`,'%m-%Y')='$month' AND E.user_id='$_SESSION[user_id]'")->get();
+		$data = $this->where("DATE_FORMAT(`date`,'%m-%Y')='$month' AND user_id='$_SESSION[user_id]'")->get();
 		$result = keyFormat($data, 'date');
 
 		return $result;
@@ -95,7 +95,10 @@ class Entry extends DBTable {
 
 	function getTags($entry_id) {
 		global $sql;
-		return $sql->getById("SELECT T.id,T.name FROM Tag T INNER JOIN EntryTag ET ON T.id=ET.tag_id WHERE ET.entry_id=$entry_id");
+		return $sql->getById("SELECT T.id,T.name,S.value AS color FROM Tag T 
+			INNER JOIN EntryTag ET ON T.id=ET.tag_id 
+			INNER JOIN Setting S ON S.item_id=T.id
+			WHERE ET.entry_id=$entry_id");
 	}
 
 	function search($term) {

@@ -72,7 +72,8 @@ function saveTag($entry_id, $tag) {
 	$user_id = $_SESSION['user_id'];
 	$tag_id = $sql->getOne("SELECT id FROM Tag WHERE name='$tag' AND user_id=$user_id");
 	if(!$tag_id) {
-		$tag_id = $sql->insert("Tag", array('name'=>$tag, 'user_id'=>$user_id));
+		$tag_id = $sql->insert("Tag", array('name' => $tag, 'user_id' => $user_id));
+		$sql->insert("Setting", array('name' => 'tag_color', 'item_id' => $tag_id, 'user_id' => $user_id, 'value' => '#' . dechex(rand(0x000000, 0xFFFFFF))));
 	}
 
 	$sql->insert('EntryTag', array(
@@ -81,13 +82,13 @@ function saveTag($entry_id, $tag) {
 	));
 }
 
-function showTags($tags) {
+function showTags($tags, $prefix = '') {
 	global $config;
 
 	if($tags) {
-		print ' | Tags: <ul class="tags">';
+		print $prefix . '<ul class="tags">';
 		foreach ($tags as $id => $tag) {
-			print "<li><a class='with-icon tag' href='$config[home_url]index.php?tag=$tag'>$tag</a></li>";
+			print "<li><a class='with-icon tag' href='$config[home_url]index.php?tag=$tag[name]' style='background-color:$tag[color]'>$tag[name]</a></li>";
 		}
 		print '</ul>';
 	}

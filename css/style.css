@@ -141,5 +141,14 @@ ul.horizontal li {
 }
 .tags li {
 	display: inline;
-	padding-right: 10px;
+}
+
+.tag {
+	color: #000;
+	padding:3px;
+	text-shadow:1px 1px #fff;
+	background-image: none !important;
+}
+.tag:hover {
+	color: #000;
 }

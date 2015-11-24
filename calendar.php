@@ -17,15 +17,8 @@ function day($year, $month, $day) {
 	$this_day = "$year-$month-$day";
 
 	if(!empty($all_entries[$this_day])) {
-		print "<a href='index.php?entry_id=".$all_entries[$this_day]['id']."'>Entry</a>";
-		$tags = $t_entry->getTags($all_entries[$this_day]['id']);
-		if($tags) {
-			print "<br /><ul class='tags'>";
-			foreach($tags as $tag) {
-				print "<li><a href='index.php?tag=$tag' rel='tag' class='with-icon tag'>$tag</a></li>";
-			}
-			print "</ul>";
-		}
+		print "<a href='index.php?entry_id=".$all_entries[$this_day]['id']."' class='calendar with-icon'>Entry</a><br />";
+		showTags($t_entry->getTags($all_entries[$this_day]['id']));
 	}
 	elseif($this_day < date('Y-m-d')) print "<a href='create.php?date=".$this_day."' class='with-icon edit'>Create Entry...</a>";
 }
