@@ -144,11 +144,11 @@ ul.horizontal li {
 }
 
 .tag {
-	color: #000;
+	color: #fff;
 	padding:3px;
-	text-shadow:1px 1px #fff;
+	text-shadow:1px 1px #000;
 	background-image: none !important;
 }
 .tag:hover {
-	color: #000;
+	color: #fff;
 }

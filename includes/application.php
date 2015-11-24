@@ -50,7 +50,7 @@ function email($to, $subject, $body, $from = '') {
 }
 
 function parseTags($body, $entry_id) {
-	preg_match_all("/#(\w+)/", $body, $matches);
+	preg_match_all("/#([\w\-]+)/", $body, $matches);
 
 	if($matches) {
 		saveAllTags($entry_id, $matches[1]);

@@ -6,5 +6,4 @@ require '../common.php';
 $entries = $t_entry->find('user_id=1');
 foreach($entries as $entry) {
 	parseTags($entry['body'], $entry['id']);
-
 }
