@@ -1,9 +1,11 @@
 <?php
 $t_entry = new Entry;
+$t_tag = new Tag;
 $user = new User;
 
 if((strpos($config['PHP_SELF'], '/user/') === false) 
 	and (strpos($config['PHP_SELF'], '/system/') === false) 
+	and (strpos($config['PHP_SELF'], '/api/') === false) 
 	and (strpos($config['PHP_SELF'], '/about/') === false)) checkUser();
 
 function checkUser() {
@@ -53,33 +55,8 @@ function parseTags($body, $entry_id) {
 	preg_match_all("/#([\w\-]+)/", $body, $matches);
 
 	if($matches) {
-		saveAllTags($entry_id, $matches[1]);
+		$t_entry->assignTags($entry_id, $matches[1]);
 	}
-}
-
-function saveAllTags($entry_id, $all_tags) {
-	global $sql;
-
-	$sql->remove('EntryTag', array('entry_id' => $entry_id));
-	foreach ($all_tags as $tag) {
-		saveTag($entry_id, $tag);
-	}
-}
-
-function saveTag($entry_id, $tag) {
-	global $sql;
-
-	$user_id = $_SESSION['user_id'];
-	$tag_id = $sql->getOne("SELECT id FROM Tag WHERE name='$tag' AND user_id=$user_id");
-	if(!$tag_id) {
-		$tag_id = $sql->insert("Tag", array('name' => $tag, 'user_id' => $user_id));
-		$sql->insert("Setting", array('name' => 'tag_color', 'item_id' => $tag_id, 'user_id' => $user_id, 'value' => '#' . dechex(rand(0x000000, 0xFFFFFF))));
-	}
-
-	$sql->insert('EntryTag', array(
-		'tag_id' 	=> $tag_id,
-		'entry_id'	=> $entry_id,
-	));
 }
 
 function showTags($tags, $prefix = '') {

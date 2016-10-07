@@ -37,7 +37,7 @@ table.calendar {
 	color:#666;
 }
 .calendar td.overflow-days {
-	background-color: #999;
+	background-color: #999 !important;
 }
 
 

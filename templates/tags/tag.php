@@ -40,7 +40,7 @@ function drawChart() {
 
 <div id="chart_div"></div>
 
-<?php 
+<?php
 function showFromTo($length, $last_date) {
 	$from = strtotime("-" . ($length - 1) . " days", strtotime($last_date));
 	$to = strtotime($last_date);

@@ -1,3 +1,6 @@
+<script type="text/javascript">
+var tags = <?php echo json_encode($all_tags); ?>;
+</script>
 
 <div id="all-entries">
 
@@ -29,6 +32,7 @@ foreach ($entries as $entry) {
 
 <div id="entry-save-<?php echo $entry['id'] ?>" class="entry-save">
 <label for="date">Date</label> &nbsp; <input type="text" name="date" value="<?php echo $entry['date'] ?>" /><br />
+<label for="tags">Tags</label> &nbsp; <input type="text" name="tags" id="tags" value="<?php echo implode(", ", $t_entry->getTagNames($entry['id'])); ?>" /><br />
 
 <input type="submit" name="action" value="Save" class="btn btn-primary" id="entry-save-<?php echo $entry['id'] ?>-button" />
 </div>

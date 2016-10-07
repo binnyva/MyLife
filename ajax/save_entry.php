@@ -2,11 +2,14 @@
 require('../common.php');
 
 $entry_id = $QUERY['entry_id'];
-if($entry_id) $body = $QUERY['entry-body-'.$entry_id];
-else $body = $QUERY['body'];
-$date = $QUERY['date'];
+$body = '';
+if($entry_id) $body = i($QUERY, 'entry-body-'.$entry_id);
+if(!$body) $body = $QUERY['body'];
 
-if($entry_id) $t_entry->edit($entry_id, $body, $_SESSION['user_id'], $date);
-else $t_entry->create($_SESSION['user_id'], $body, $date);
+$date = $QUERY['date'];
+$tags = preg_split('/\s*,\s*/', i($QUERY, 'tags'));
+
+if($entry_id) $t_entry->edit($entry_id, $body, $_SESSION['user_id'], $date, $tags);
+else $t_entry->create($_SESSION['user_id'], $body, $date, $tags);
 
 print '{"success": "Entry Edited"}';

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title><?php echo $config['site_title'] ?></title>
 <link href="<?php echo $config['site_url'] ?>css/style.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo $config['site_url'] ?>images/silk_theme.css" rel="stylesheet" type="text/css" />

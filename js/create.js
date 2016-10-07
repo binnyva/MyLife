@@ -1,4 +1,6 @@
 function init() {
+	autocomplete("#tags", tags, ",");
+	
 	$("#guess").click(function () {
 		getData("plugins/journaler/Journaler.php", "body");
 	});

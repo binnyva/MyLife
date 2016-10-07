@@ -1,4 +1,6 @@
 function init() {
+	autocomplete("#tags", tags, ",");
+
 	$(".edit-entry").click(function (e) {
 		var entry_id = $(this).attr('data-entry-id');
 		
@@ -12,7 +14,6 @@ function init() {
  		})
 
  		$("#entry-save-"+entry_id).show();
-
 
 		e.stopPropagation();
 		return false;

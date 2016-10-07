@@ -86,5 +86,14 @@ $journal .= "</ul>";
 }
 
 
+$journal .= "<h3>Things that happened on '$date'</h3><ul>";
+$journal .= "<li><a href='http://localhost/tools/FourSquare/?date=$date'>FourSquare</a></li>";
+$journal .= "<li><a href='http://localhost/tools/Expense/index.php?year=".date('Y', strtotime($date)).'&month='.date('Y', strtotime($date)).'&day='.date('d', strtotime($date))."'>Expenses</a></li>";
+$journal .= "<li><a href='http://apps.binnyva.com/tiker/reports/day.php?day=$date'>Tiker</a></li>";
+$journal .= "<li><a href='http://localhost/tools/Twitter/?date=$date'>Twitter</a></li>";
+$journal .= "<li><a href='http://localhost/Projects/Friendlee/?date=$date'>Friendlee</a></li>";
+
+$journal .= "</ul>";
+
 print trim($journal);
 
