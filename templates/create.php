@@ -6,7 +6,7 @@ var tags = <?php echo json_encode($all_tags); ?>;
 
 <form action="ajax/save_entry.php" class="ajaxify" method="post">
 <div class="body">
-<textarea name="body" rows="10" cols="70" id="body">
+<textarea name="body" rows="10" cols="70" id="body" autofocus="autofocus">
 <?php echo $entry['body']; ?>
 </textarea>
 </div>

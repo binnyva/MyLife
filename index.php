@@ -26,4 +26,5 @@ $template->addResource('bower_components/jquery-ui/ui/minified/jquery.ui.autocom
 $template->addResource('bower_components/jquery-ui/themes/flick/jquery-ui.min.css');
 $template->addResource('bower_components/jquery-ui/themes/flick/jquery.ui.theme.css');
 $template->addResource("_autocomplete.js", "js");
+
 render();

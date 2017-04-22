@@ -6,8 +6,9 @@ $curmonth = ($calendar->month < 10) ? "0$calendar->month" : $calendar->month;
 $curyear  = $calendar->year;
 
 //Get all the tasks and reminders for a whole month
-$all_entries = $t_entry->getMonth($curmonth. "-".$curyear); 
+$all_entries = $t_entry->getMonth($curmonth. "-".$curyear);
 
+$page_title = 'Calendar';
 render();
 
 function day($year, $month, $day) {

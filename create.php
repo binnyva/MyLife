@@ -13,10 +13,7 @@ if($date) { // Entry on given date
 	if($entry_option) $entry = $entry_option;
 }
 
-$all_tags = $sql->getCol("SELECT T.name
-	FROM Tag T 
-	WHERE T.user_id=$_SESSION[user_id]
-	ORDER BY name");
+$all_tags = $t_tag->getAll();
 
 $template->addResource('bower_components/jquery-ui/ui/minified/jquery-ui.min.js');
 $template->addResource('bower_components/jquery-ui/ui/minified/jquery.ui.autocomplete.min.js');
@@ -25,4 +22,6 @@ $template->addResource('bower_components/jquery-ui/themes/flick/jquery.ui.theme.
 $template->addResource("library/ajaxify.js", "js");
 $template->addResource("_autocomplete.js", "js");
 $template->addResource("index.js", "js");
+
+$page_title = 'Create Entry';
 render();
