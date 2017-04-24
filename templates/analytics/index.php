@@ -16,9 +16,10 @@ $html->buildInput("action", "&nbsp;", 'submit', 'Analyze');
 
 <div id="content">
 <?php if($posts) { ?>
-Total Instances: <?php echo count($posts); ?><br />
-Weekly Average: <br />
-Monthly Average: <br />
+Total Instances: <strong><?php echo $total; ?></strong><br />
+Timeframe: <strong><?php echo $gap ?> days</strong><br />
+Weekly Average: <strong><?php echo round($total / $weeks, 2); ?></strong><br />
+Monthly Average: <strong><?php echo round($total / $months, 2); ?></strong><br />
 
 <h3>Posts...</h3>
 <?php foreach ($posts as $post) { ?>
@@ -28,6 +29,7 @@ Monthly Average: <br />
 <span class="entry-tags"><?php showTags($t_entry->getTags($post['id'])); ?></span>
 </div>
 <?php } ?>
+<br /><br />
 
 <?php } ?>
 </div>
