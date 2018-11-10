@@ -8,7 +8,7 @@ $date = date('Y-m-d', strtotime("yesterday"));
 if(empty($argv[1])) {
 	//die("Usage : php Journaler.php <date>\n");
 
-	if(!empty($_POST['date'])) $date = $_POST['date'];
+	$date = i($QUERY, 'date');
 } else {
 	$date = $argv[1];
 }
@@ -28,9 +28,8 @@ if($things_i_did) $journal .= "</ul>";
 
 $sql = new Sql('Data');
 
-//Find location from TravelDo on that date...
+//Find location from Travel on that date...
 $travel = $sql->getAssoc("SELECT TJ.name,TP.name AS place,note,start_on FROM Travel_Journey TJ INNER JOIN Travel_Place TP ON travel_place_id=TP.id WHERE '$date' BETWEEN start_on AND end_on");
-
 if($travel) {
 	$journal .= "<h3>At $travel[place]</h3>";
 	if($date == $travel['start_on']) {
@@ -40,11 +39,20 @@ if($travel) {
 
 //Find the expences for that day.
 $expences = $sql->getAll("SELECT info, amount FROM Expense WHERE DATE(added_on)='$date'");
-
 if($expences) {
 	$journal .= "<h3>Expenses</h3><ul>";
 	foreach($expences as $exp) {
 		$journal .= "<li>$exp[info] - $exp[amount]</li>";
+	}
+	$journal .= "</ul>";
+}
+
+// Tasks.
+$tasks = $sql->getAll("SELECT task FROM Habitica_Task WHERE DATE(completed_on)='$date' AND type='todo'");
+if($tasks) {
+	$journal .= "<h3>Habitica Tasks</h3><ul>";
+	foreach($tasks as $task) {
+		$journal .= "<li>$task[task]</li>";
 	}
 	$journal .= "</ul>";
 }
@@ -87,11 +95,13 @@ $journal .= "</ul>";
 
 
 $journal .= "<h3>Things that happened on '$date'</h3><ul>";
+$journal .= "<li><a href='https://www.google.co.in/maps/timeline?pb=!1m2!1m1!1s$date'>Timeline</a></li>";
 $journal .= "<li><a href='http://localhost/tools/FourSquare/?date=$date'>FourSquare</a></li>";
 $journal .= "<li><a href='http://localhost/tools/Expense/index.php?year=".date('Y', strtotime($date)).'&month='.date('Y', strtotime($date)).'&day='.date('d', strtotime($date))."'>Expenses</a></li>";
 $journal .= "<li><a href='http://apps.binnyva.com/tiker/reports/day.php?day=$date'>Tiker</a></li>";
 $journal .= "<li><a href='http://localhost/tools/Twitter/?date=$date'>Twitter</a></li>";
 $journal .= "<li><a href='http://localhost/Projects/Friendlee/?date=$date'>Friendlee</a></li>";
+$journal .= "<li><a href='http://localhost/tools/Prod/table.php?date=2017-05-24&type=todo&timeframe=day'>Habitica</a></li>";
 
 $journal .= "</ul>";
 

@@ -2,6 +2,13 @@
 include('common.php');
 $calendar = new Calendar('day');
 
+$show_tags_raw = i($QUERY, 'tags');
+$show_tags = array();
+if($show_tags_raw) {
+	$show_tags = preg_split('/\s*,\s*/', $show_tags_raw);
+	$calendar->link_template = "?year=%YEAR%&amp;month=%MONTH%&tags=$show_tags_raw";
+}
+
 $curmonth = ($calendar->month < 10) ? "0$calendar->month" : $calendar->month;
 $curyear  = $calendar->year;
 
@@ -12,15 +19,22 @@ $page_title = 'Calendar';
 render();
 
 function day($year, $month, $day) {
-	global $all_entries, $t_entry;
+	global $all_entries, $t_entry, $show_tags;
 
 	//Find what all will happen on that day.
 	$this_day = "$year-$month-$day";
 
 	if(!empty($all_entries[$this_day])) {
-		print "<a href='index.php?entry_id=".$all_entries[$this_day]['id']."' class='calendar with-icon'>Entry</a><br />";
-		showTags($t_entry->getTags($all_entries[$this_day]['id']));
+		$title = 'Entry';
+		if($all_entries[$this_day]['title']) $title = $all_entries[$this_day]['title'];
+
+		print "<a href='index.php?entry_id=".$all_entries[$this_day]['id']."' class='calendar with-icon'>" . $title . "</a><br />";
+		$tags = $t_entry->getTags($all_entries[$this_day]['id']);
+		foreach ($tags as $id => $t) {
+			if($show_tags and (!in_array($t['name'], $show_tags))) unset($tags[$id]);
+		}
+		showTags($tags);
 	}
-	elseif($this_day < date('Y-m-d')) print "<a href='create.php?date=".$this_day."' class='with-icon edit'>Create Entry...</a>";
+	elseif($this_day <= date('Y-m-d')) print "<a href='create.php?date=".$this_day."' class='with-icon edit'>Create Entry...</a>";
 }
 

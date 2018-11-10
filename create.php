@@ -2,12 +2,13 @@
 require("./common.php");
 
 $date = i($QUERY, 'date', date("Y-m-d", strtotime('yesterday')));
-$entry = array(
+$entry = [
 	'id'	=> 0,
 	'date'	=> $date,
+	'title'	=> '',
 	'body'	=> '',
-	'tags'	=> array()
-);
+	'tags'	=> []
+];
 if($date) { // Entry on given date
 	$entry_option = $t_entry->getByDate($date);
 	if($entry_option) $entry = $entry_option;

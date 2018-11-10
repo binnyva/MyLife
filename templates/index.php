@@ -11,7 +11,11 @@ foreach ($entries as $entry) {
 	$entry_count++; ?>
 
 <div class="entry" id="entry-<?php echo $entry['id'] ?>">
-<h4><a href="index.php?entry_id=<?php echo $entry['id'] ?>">Entry for <?php echo date('d\<\s\u\p\>S\<\/\s\u\p\> M, Y', strtotime($entry['date'])); ?></a></h4>
+	<?php 
+	if(!$entry['title']) $title = 'Entry for ' . date('d\<\s\u\p\>S\<\/\s\u\p\> M, Y', strtotime($entry['date']));
+	else $title = $entry['title'] . '('.date('d\<\s\u\p\>S\<\/\s\u\p\> M', strtotime($entry['date'])).')';
+	?>
+<h4><a href="index.php?entry_id=<?php echo $entry['id'] ?>"><?php echo $title ?></a></h4>
 
 <div class="meta">
 <?php if(empty($search)) { ?><a href="#" class="edit-entry edit with-icon" data-entry-id="<?php echo $entry['id'] ?>">Edit Entry</a><?php } ?>
@@ -33,6 +37,7 @@ foreach ($entries as $entry) {
 <div id="entry-save-<?php echo $entry['id'] ?>" class="entry-save">
 <label for="date">Date</label> &nbsp; <input type="text" name="date" value="<?php echo $entry['date'] ?>" /><br />
 <label for="tags">Tags</label> &nbsp; <input type="text" name="tags" id="tags" value="<?php echo implode(", ", $t_entry->getTagNames($entry['id'])); ?>" /><br />
+<label for="title">Title/Life Event</label> &nbsp; <input type="text" name="title" value="<?php echo $entry['title'] ?>" /><br />
 
 <input type="submit" name="action" value="Save" class="btn btn-primary" id="entry-save-<?php echo $entry['id'] ?>-button" />
 </div>
@@ -67,6 +72,8 @@ $t_entry->pager->text['first'] = '<span class="glyphicon glyphicon-step-backward
 $t_entry->pager->text['last'] = '<span class="glyphicon glyphicon-step-forward"></span>';
 $t_entry->pager->page_link = 'index.php';
 if(!empty($search)) $t_entry->pager->page_link = 'search.php?search='.$search;
+if(i($QUERY, 'tag')) $t_entry->pager->opt['parameters']['tag'] = i($QUERY, 'tag');
+
 print $t_entry->pager->getLink("first") . $t_entry->pager->getLink("back");
 $t_entry->pager->printPager(); 
 print $t_entry->pager->getLink("next") . $t_entry->pager->getLink("last");

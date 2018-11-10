@@ -12,6 +12,7 @@ var tags = <?php echo json_encode($all_tags); ?>;
 </div>
 <div class="entry-save">
 <label for="tags">Tags</label> &nbsp; <input type="text" name="tags" id="tags" value="<?php echo implode(',', $entry['tags']) ?>" /><br />
+<label for="tags">Title/Life Event</label> &nbsp; <input type="text" name="title" id="title" value="<?php echo $entry['title'] ?>" /><br />
 <label for="date">Date</label> &nbsp; <input type="text" name="date" id="date" value="<?php echo $entry['date'] ?>" /><br />
 <input type="hidden" name="entry_id" value="<?php echo $entry['id'] ?>" />
 <input type="submit" name="action" value="Save" class="btn btn-primary" id="entry-save-button" />

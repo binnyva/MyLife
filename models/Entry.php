@@ -10,7 +10,7 @@ class Entry extends DBTable {
     }
 
     /// Create a Journal entry. 
-    function create($user_id, $body, $date, $tags=array(), $subject='', $locked = 0) {
+    function create($user_id, $body, $date, $tags=array(), $title='', $locked = 0) {
 		// Check if already there.
 		$exists = $this->find("user_id=$user_id AND `date`='$date'");
 		if($exists) {
@@ -24,7 +24,7 @@ class Entry extends DBTable {
 		$this->field = array(
 				'body'		=> $body,
 				'date'		=> $date,
-				'title'		=> $subject,
+				'title'		=> $title,
 				'added_on'	=> 'NOW()',
 				'locked'	=> $locked,
 				'user_id'	=> $user_id,
@@ -38,7 +38,7 @@ class Entry extends DBTable {
 	}
 
 	/// Edit an existing journal entry.
-	function edit($entry_id, $body, $user_id=0, $date='', $tags = array(), $subject='') {
+	function edit($entry_id, $body, $user_id=0, $date='', $tags = array(), $title='') {
 		$locked = 0;
 		if(strpos($body, 'LOCKED') !== false) $locked = 1;
 
@@ -49,7 +49,7 @@ class Entry extends DBTable {
 
 		if($user_id) $data['user_id'] = $user_id;
 		if($date) $data['date'] = $date;
-		if($subject) $data['subject'] = $subject;
+		if($title) $data['title'] = $title;
 
 		$this->field = $data;
 		$this->save($entry_id);
