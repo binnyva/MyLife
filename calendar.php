@@ -1,6 +1,6 @@
 <?php
 include('common.php');
-$calendar = new Calendar('day');
+$calendar = new iframe\HTML\Calendar('day');
 
 $show_tags_raw = i($QUERY, 'tags');
 $show_tags = array();

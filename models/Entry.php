@@ -1,12 +1,13 @@
 <?php
-class Entry extends DBTable {
+use iframe\DB\SqlPager;
+
+class Entry extends iframe\DB\DBTable {
 	public $pager;
 	private $sql;
 
 	function __construct() {
        parent::__construct('Entry');
-       global $sql;
-       $this->sql = $sql;
+       $this->sql = iframe\App::$db;
     }
 
     /// Create a Journal entry. 
@@ -69,7 +70,7 @@ class Entry extends DBTable {
 
 		$t_tag->clearExistingTags($entry_id);
 		
-		if(!$tags) continue; // If no tags given, we are done
+		if(!$tags) return; // If no tags given, we are done
 
 		foreach($tags as $t) {
 			$tag_id = $t_tag->create($t);

@@ -1,27 +1,26 @@
 <?php
+setupBackwardCompatibility();
+
 $t_entry = new Entry;
 $t_tag = new Tag;
 $user = new User;
 
-if((strpos($config['PHP_SELF'], '/user/') === false) 
-	and (strpos($config['PHP_SELF'], '/system/') === false) 
-	and (strpos($config['PHP_SELF'], '/api/') === false) 
-	and (strpos($config['PHP_SELF'], '/about/') === false)) checkUser();
+if((strpos(iframe\App::$config['PHP_SELF'], '/user/') === false) 
+	and (strpos(iframe\App::$config['PHP_SELF'], '/system/') === false) 
+	and (strpos(iframe\App::$config['PHP_SELF'], '/api/') === false) 
+	and (strpos(iframe\App::$config['PHP_SELF'], '/about/') === false)) checkUser();
 
 function checkUser() {
-	global $config;
-
-	if(!isset($_SESSION['user_id']) and isset($config['single_user'])) {
-		$_SESSION['user_id'] = $config['single_user'];
+	if(!isset($_SESSION['user_id']) and isset(iframe\App::$config['single_user'])) {
+		$_SESSION['user_id'] = iframe\App::$config['single_user'];
 	}
 	
 	if((!isset($_SESSION['user_id']) or !$_SESSION['user_id']))
-		showMessage("Please login to use this feature", $config['site_url'] . 'user/login.php', "error");
+		showMessage("Please login to use this feature", iframe\App::$config['site_url'] . 'user/login.php', "error");
 }
 
 function email($to, $subject, $body, $from = '') {
 	//return true; //:DEBUG:
-	global $config;
 	require("Mail.php");
 
 	if(!$from) $from = "BinnBot <binnbot@gmail.com>";
@@ -29,8 +28,8 @@ function email($to, $subject, $body, $from = '') {
 	// SMTP info here!
 	$host = "smtp.gmail.com";
 
-	$username = $config['email_username'];
-	$password = $config['email_password'];
+	$username = iframe\App::$config['email_username'];
+	$password = iframe\App::$config['email_password'];
 	
 	$headers = array ('From' => $from,
 		'To' => $to,
@@ -60,12 +59,10 @@ function parseTags($body, $entry_id) {
 }
 
 function showTags($tags, $prefix = '') {
-	global $config;
-
 	if($tags) {
 		print $prefix . '<ul class="tags">';
 		foreach ($tags as $id => $tag) {
-			print "<li><a class='with-icon tag' href='$config[home_url]index.php?tag=$tag[name]' style='background-color:$tag[color]'>$tag[name]</a></li>";
+			print "<li><a class='with-icon tag' href='" . iframe\App::$config['app_url'] . "index.php?tag=$tag[name]' style='background-color:$tag[color]'>$tag[name]</a></li>";
 		}
 		print '</ul>';
 	}

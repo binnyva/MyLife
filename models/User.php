@@ -1,5 +1,8 @@
 <?php
+use iframe\DB\DBtable;
+
 class User extends DBTable {
+	private $sql;
 	var $id = 0;
 	
 	//Configs
@@ -8,9 +11,10 @@ class User extends DBTable {
 	
 	//The constructor
 	//Get the details of the current user on every page load.
-	function User() {
-		global $sql, $config;
-		$this->cookie_prefix_for_site = unformat($config['site_title']) . '_';
+	function __construct() {
+		$this->sql = iframe\App::$db;
+		$config = iframe\App::$config;
+		$this->cookie_prefix_for_site = unformat($config['app_name']) . '_';
 		$this->cookie_expire = time() + (60*60*24*30);//Will expire in 30 days
 		parent::__construct("User");
 
@@ -22,7 +26,7 @@ class User extends DBTable {
 		//This is a User who have enabled the 'Remember me' Option - so there is a cookie in the users system
 		if(isset($_COOKIE[$this->cookie_prefix_for_site.'username']) and $_COOKIE[$this->cookie_prefix_for_site.'username'] and isset($_COOKIE[$this->cookie_prefix_for_site.'password_hash'])) {
 
-			$user_details = $sql->getAssoc("SELECT id,name FROM User WHERE username='" . $_COOKIE[$this->cookie_prefix_for_site . 'username'] . "' "
+			$user_details = $this->sql->getAssoc("SELECT id,name FROM User WHERE username='" . $_COOKIE[$this->cookie_prefix_for_site . 'username'] . "' "
 											. " AND MD5(CONCAT(password,'#c*2u!'))='" . $_COOKIE[$this->cookie_prefix_for_site . 'password_hash'] . "'");
 		
 			if($user_details) { //If it is valid, store it in session
@@ -41,10 +45,9 @@ class User extends DBTable {
 	 * Login the user with the username and password given as the argument
 	 */
 	function login($username,$password,$remember=0) {
-		global $sql;
 		$this->id = -1;
 		
-		$user_details = $sql->getAssoc("SELECT id,name FROM User WHERE username='$username' AND password='$password'");
+		$user_details = $this->sql->getAssoc("SELECT id,name FROM User WHERE username='$username' AND password='$password'");
 		if(!$user_details) { //Query did not run correctly
 			showMessage("Invalid Username/Password", "user/login.php", "error");
 
@@ -92,11 +95,11 @@ class User extends DBTable {
 	 * Registers the user with the details provided in the arguments. If the specified username is already taken, an error will be shown.
 	 */
 	function register($username, $password, $name, $email) {
-		global $sql, $QUERY;
+		global $QUERY;
 		
 		//Check if the username is already taken.
-		$result 	= $sql->getSql("SELECT id FROM User WHERE username='$username'");
-		$username_taken = $sql->fetchNumRows($result);
+		$result 	= $this->sql->getSql("SELECT id FROM User WHERE username='$username'");
+		$username_taken = $this->sql->fetchNumRows($result);
 	
 		if ($username_taken == 0) {
 			$errors = check(array(
@@ -130,7 +133,7 @@ class User extends DBTable {
 	 * Edits the current user's profile.
 	 */
 	function update($id, $password, $name, $email, $url) {
-		global $sql, $QUERY;
+		global $QUERY;
 		
 		$errors = check(array(
 			array('name'=>'username','is'=>'empty'),
@@ -165,12 +168,12 @@ class User extends DBTable {
 	 * 	$user->passwordRetrival(array('email'=>'binnyva@gmail.com'));
 	 */
 	 function passwordRetrival($data) {
-	 	global $sql, $config;
+		$config = iframe\App::$config;
 	 	
 	 	if(isset($data['username'])) {
-		 	extract($sql->getAssoc("SELECT name,username,password,email FROM User WHERE username='$data[username]'"));
+		 	extract($this->sql->getAssoc("SELECT name,username,password,email FROM User WHERE username='$data[username]'"));
 	 	} elseif(isset($data['email'])) {
-	 		extract($sql->getAssoc("SELECT name,username,password,email FROM User WHERE email='$data[email]'"));
+	 		extract($this->sql->getAssoc("SELECT name,username,password,email FROM User WHERE email='$data[email]'"));
 	 	} else {
 	 		showMessage("Please provide either the username or the password.", "forgot_password.php", "error");
 	 	}

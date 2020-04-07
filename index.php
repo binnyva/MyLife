@@ -21,10 +21,10 @@ if(!$entries) {
 
 $all_tags = $t_tag->getAll();
 
-$template->addResource('bower_components/jquery-ui/ui/minified/jquery-ui.min.js');
-$template->addResource('bower_components/jquery-ui/ui/minified/jquery.ui.autocomplete.min.js');
-$template->addResource('bower_components/jquery-ui/themes/flick/jquery-ui.min.css');
-$template->addResource('bower_components/jquery-ui/themes/flick/jquery.ui.theme.css');
-$template->addResource("_autocomplete.js", "js");
+iframe\App::$template->addResource('bower_components/jquery-ui/ui/minified/jquery-ui.min.js', 'js', true);
+iframe\App::$template->addResource('bower_components/jquery-ui/ui/minified/jquery.ui.autocomplete.min.js', 'js', true);
+iframe\App::$template->addResource('bower_components/jquery-ui/themes/flick/jquery-ui.min.css', 'css', true);
+iframe\App::$template->addResource('bower_components/jquery-ui/themes/flick/jquery.ui.theme.css', 'css', true);
+iframe\App::$template->addResource("_autocomplete.js", "js");
 
 render();

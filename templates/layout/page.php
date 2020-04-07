@@ -2,15 +2,15 @@
 <html><head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title><?php 
-if(!isset($page_title)) $page_title = $config['site_title'];
-else $page_title = $config['site_title'] . ' : ' . $page_title;
+if(!isset($page_title)) $page_title = $config['app_name'];
+else $page_title = $config['app_name'] . ' : ' . $page_title;
 
 echo $page_title;
 ?></title>
 
-<link href="<?php echo $config['site_url'] ?>css/style.css" rel="stylesheet" type="text/css" />
-<link href="<?php echo $config['site_url'] ?>images/silk_theme.css" rel="stylesheet" type="text/css" />
-<link href="<?php echo $config['site_url'] ?>bower_components/bootstrap/dist/css/bootstrap-theme-paper.min.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $config['app_url'] ?>css/style.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $config['app_url'] ?>images/silk_theme.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $config['app_url'] ?>bower_components/bootstrap/dist/css/bootstrap-theme-paper.min.css" rel="stylesheet" type="text/css" />
 <?php echo $css_includes ?>
 </head>
 <body>
@@ -25,7 +25,7 @@ echo $page_title;
 	    <span class="icon-bar"></span>
 	    <span class="icon-bar"></span>
 	  </button>
-	  <a class="navbar-brand" href="<?php echo $config['site_url']; ?>"><?php echo $config['site_title'] ?></a>
+	  <a class="navbar-brand" href="<?php echo $config['app_url']; ?>"><?php echo $config['app_name'] ?></a>
 	</div>
 	<div class="collapse navbar-collapse">
 		<ul class="nav navbar-nav pull-right">
@@ -33,9 +33,9 @@ echo $page_title;
 <input type="text" name="search" id="search" placeholder="Search..." value="<?php echo i($QUERY, 'search') ?>" class="form-control" />
 <span class="input-group-btn"><button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button></span>
 </form></li>
-		<li><a class="calendar with-icon" href="<?php echo $config['site_url']; ?>calendar.php"> Calendar</a></li>
-		<li><a class="previous with-icon" href="<?php echo $config['site_url']; ?>index.php?date=<?php echo date('Y-m-d', strtotime('Yesterday')); ?>"> Yesterday</a></li>
-		<li><a class="add with-icon" href="<?php echo $config['site_url']; ?>index.php?date=<?php echo date('Y-m-d'); ?>"> Today</a></li>
+		<li><a class="calendar with-icon" href="<?php echo $config['app_url']; ?>calendar.php"> Calendar</a></li>
+		<li><a class="previous with-icon" href="<?php echo $config['app_url']; ?>index.php?date=<?php echo date('Y-m-d', strtotime('Yesterday')); ?>"> Yesterday</a></li>
+		<li><a class="add with-icon" href="<?php echo $config['app_url']; ?>index.php?date=<?php echo date('Y-m-d'); ?>"> Today</a></li>
 		</ul>
 	</div>
 
@@ -60,11 +60,11 @@ include($GLOBALS['template']->template);
 <!-- End Content -->
 </div>
 
-<script src="<?php echo $config['site_url'] ?>bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
-<script src="<?php echo $config['site_url'] ?>bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="<?php echo $config['site_url'] ?>js/application.js" type="text/javascript"></script>
-<script type="text/javascript" src="<?php echo $config['home_url'] ?>js/library/tinymce/tinymce.min.js"></script>
-<script type="text/javascript" src="<?php echo $config['home_url'] ?>js/library/tinymce/jquery.tinymce.min.js"></script>
+<script src="<?php echo $config['app_url'] ?>bower_components/jquery/dist/jquery.min.js"></script>
+<script src="<?php echo $config['app_url'] ?>bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="<?php echo $config['app_url'] ?>js/application.js"></script>
+<script src="<?php echo $config['app_url'] ?>js/library/tinymce/tinymce.min.js"></script>
+<script src="<?php echo $config['app_url'] ?>js/library/tinymce/jquery.tinymce.min.js"></script>
 
 <?php echo $js_includes ?>
 

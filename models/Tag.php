@@ -1,11 +1,12 @@
 <?php
+use iframe\DB\DBtable;
+
 class Tag extends DBTable {
 	private $sql;
 
 	function __construct() {
        parent::__construct('Tag');
-       global $sql;
-       $this->sql = $sql;
+       $this->sql = iframe\App::$db;
     }
 
     /**
