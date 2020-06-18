@@ -16,7 +16,7 @@ function checkUser() {
 	}
 	
 	if((!isset($_SESSION['user_id']) or !$_SESSION['user_id']))
-		showMessage("Please login to use this feature", iframe\App::$config['site_url'] . 'user/login.php', "error");
+		iframe\App::showMessage("Please login to use this feature", iframe\App::$config['site_url'] . 'user/login.php', "error");
 }
 
 function email($to, $subject, $body, $from = '') {

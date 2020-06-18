@@ -1,7 +1,5 @@
 <?php
-use iframe\DB\DBtable;
-
-class User extends DBTable {
+class User extends iframe\DB\DBTable {
 	private $sql;
 	var $id = 0;
 	

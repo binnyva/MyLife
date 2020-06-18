@@ -11,6 +11,6 @@ $title = i($QUERY, 'title');
 $tags = preg_split('/\s*,\s*/', i($QUERY, 'tags'));
 
 if($entry_id) $t_entry->edit($entry_id, $body, $_SESSION['user_id'], $date, $tags, $title);
-else $t_entry->create($_SESSION['user_id'], $body, $date, $tags);
+else $t_entry->create($_SESSION['user_id'], $body, $date, $tags, $title);
 
 print '{"success": "Entry Edited"}';
