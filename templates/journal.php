@@ -15,7 +15,7 @@ foreach ($entries as $entry) {
 	if(!$entry['title']) $title = 'Entry for ' . date('d\<\s\u\p\>S\<\/\s\u\p\> M, Y', strtotime($entry['date']));
 	else $title = $entry['title'] . '('.date('d\<\s\u\p\>S\<\/\s\u\p\> M', strtotime($entry['date'])).')';
 	?>
-<h4><a href="index.php?entry_id=<?php echo $entry['id'] ?>"><?php echo $title ?></a></h4>
+<h4><a href="journal.php?entry_id=<?php echo $entry['id'] ?>"><?php echo $title ?></a></h4>
 
 <div class="meta">
 <?php if(empty($search)) { ?><a href="#" class="edit-entry edit with-icon" data-entry-id="<?php echo $entry['id'] ?>">Edit Entry</a><?php } ?>
@@ -48,8 +48,8 @@ foreach ($entries as $entry) {
 <?php if(count($entries) == 1) { ?>
 <div class="container">
 <ul class="btn-group btn-group-justified center-block">
-<li class="btn btn-default"><a class="previous previous-day with-icon" href="index.php?date=<?php echo date('Y-m-d', strtotime($entry['date']) - (60*60*24)); ?>">Previous Day(<?php echo date('dS M', strtotime($entry['date']) - (60*60*24)); ?>)</a></li>
-<li class="btn btn-default"><a class="next next-day with-icon" href="index.php?date=<?php echo date('Y-m-d', strtotime($entry['date']) + (60*60*24)); ?>">Next Day(<?php echo date('dS M', strtotime($entry['date']) + (60*60*24)); ?>)</a></li></ul>
+<li class="btn btn-default"><a class="previous previous-day with-icon" href="journal.php?date=<?php echo date('Y-m-d', strtotime($entry['date']) - (60*60*24)); ?>">Previous Day(<?php echo date('dS M', strtotime($entry['date']) - (60*60*24)); ?>)</a></li>
+<li class="btn btn-default"><a class="next next-day with-icon" href="journal.php?date=<?php echo date('Y-m-d', strtotime($entry['date']) + (60*60*24)); ?>">Next Day(<?php echo date('dS M', strtotime($entry['date']) + (60*60*24)); ?>)</a></li></ul>
 </div>
 <?php }
 }
@@ -70,7 +70,7 @@ $t_entry->pager->text['previous'] = '<span class="glyphicon glyphicon-step-backw
 $t_entry->pager->text['next'] = '<span class="glyphicon glyphicon-forward"></span>';
 $t_entry->pager->text['first'] = '<span class="glyphicon glyphicon-step-backward"></span>';
 $t_entry->pager->text['last'] = '<span class="glyphicon glyphicon-step-forward"></span>';
-$t_entry->pager->page_link = 'index.php';
+$t_entry->pager->page_link = 'journal.php';
 if(!empty($search)) $t_entry->pager->page_link = 'search.php?search='.$search;
 if(i($QUERY, 'tag')) $t_entry->pager->opt['parameters']['tag'] = i($QUERY, 'tag');
 

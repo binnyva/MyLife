@@ -34,8 +34,8 @@ echo $page_title;
 <span class="input-group-btn"><button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button></span>
 </form></li>
 		<li><a class="calendar with-icon" href="<?php echo $config['app_url']; ?>journal.php"> Journal View</a></li>
-		<li><a class="previous with-icon" href="<?php echo $config['app_url']; ?>index.php?date=<?php echo date('Y-m-d', strtotime('Yesterday')); ?>"> Yesterday</a></li>
-		<li><a class="add with-icon" href="<?php echo $config['app_url']; ?>index.php?date=<?php echo date('Y-m-d'); ?>"> Today</a></li>
+		<li><a class="previous with-icon" href="<?php echo $config['app_url']; ?>journal.php?date=<?php echo date('Y-m-d', strtotime('Yesterday')); ?>"> Yesterday</a></li>
+		<li><a class="add with-icon" href="<?php echo $config['app_url']; ?>journal.php?date=<?php echo date('Y-m-d'); ?>"> Today</a></li>
 		</ul>
 	</div>
 

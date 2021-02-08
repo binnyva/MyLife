@@ -30,7 +30,7 @@ function day($year, $month, $day) {
 		$title = 'Entry';
 		if($all_entries[$this_day]['title']) $title = $all_entries[$this_day]['title'];
 
-		print "<a href='index.php?entry_id=".$all_entries[$this_day]['id']."' class='calendar with-icon'>" . $title . "</a><br />";
+		print "<a href='journal.php?entry_id=".$all_entries[$this_day]['id']."' class='calendar with-icon'>" . $title . "</a><br />";
 		$tags = $t_entry->getTags($all_entries[$this_day]['id']);
 		foreach ($tags as $id => $t) {
 			if($show_tags and (!in_array($t['name'], $show_tags))) unset($tags[$id]);
