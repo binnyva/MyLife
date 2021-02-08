@@ -111,3 +111,14 @@ function getSnippet($keyword, $txt) {
 	return $snippet;
 }
 
+function summaryTimeframeText($timeframe) {
+	$timeframe_str = strtotime($timeframe);
+	
+	if(substr($timeframe, 9, 2) == "00") {
+		return date('F Y', $timeframe_str); // . " month";
+	} else {
+		return date('M d', $timeframe_str) . " - " . date('M d', strtotime("next saturday", $timeframe_str)) . " week";
+	}
+
+	return false;
+}

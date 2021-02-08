@@ -11,20 +11,25 @@ class Entry extends iframe\DB\DBTable {
     }
 
     /// Create a Journal entry. 
-    function create($user_id, $body, $date, $tags=array(), $title='', $locked = 0) {
+    function create($user_id, $body, $date=null, $tags=array(), $title='', $summary_timeframe = null) {
 		// Check if already there.
-		$exists = $this->find("user_id=$user_id AND `date`='$date'");
+    	$where = "";
+		if($date) $where = "`date` = '$date'";
+		elseif($summary_timeframe) $where = "`summary_timeframe` = '$summary_timeframe'";
+		$exists = $this->find("user_id=$user_id  AND $where");
 		if($exists) {
 			// Entry for the date exists. Don't Enter again
 			// print "Entry for $date Exists\n";
 			return $exists[0]['id'];
 		}
 
-		if(strpos($body, 'LOCKED') !== false) $locked = 1;
+		$locked = '0';
+		if(strpos($body, 'LOCKED') !== false) $locked = '1';
 
 		$this->field = array(
 				'body'		=> $body,
 				'date'		=> $date,
+				'summary_timeframe'		=> $summary_timeframe,
 				'title'		=> $title,
 				'added_on'	=> 'NOW()',
 				'locked'	=> $locked,
@@ -39,9 +44,9 @@ class Entry extends iframe\DB\DBTable {
 	}
 
 	/// Edit an existing journal entry.
-	function edit($entry_id, $body, $user_id=0, $date='', $tags = array(), $title='') {
-		$locked = 0;
-		if(strpos($body, 'LOCKED') !== false) $locked = 1;
+	function edit($entry_id, $body, $user_id=0, $date=null, $tags = array(), $title='', $summary_timeframe=null) {
+		$locked = '0';
+		if(strpos($body, 'LOCKED') !== false) $locked = '1';
 
 		$data = array(
 			'body'	=> $body,
@@ -50,6 +55,7 @@ class Entry extends iframe\DB\DBTable {
 
 		if($user_id) $data['user_id'] = $user_id;
 		if($date) $data['date'] = $date;
+		if($summary_timeframe) $data['summary_timeframe'] = $summary_timeframe;
 		if($title) $data['title'] = $title;
 
 		$this->field = $data;
@@ -117,6 +123,16 @@ class Entry extends iframe\DB\DBTable {
 			return $entries[0];
 		}
 		return array();
+	}
+
+	function getBySummaryTimeframe($date) {
+		$entries = $this->find(array("user_id"=>$_SESSION['user_id'], 'summary_timeframe'=> $date));
+
+		if($entries) {
+			$entries[0]['tags'] = $this->getTagNames($entries[0]['id']);
+			return $entries[0];
+		}
+		return [];
 	}
 
 	/// Returns all the journal entries tagged with a specific tag.

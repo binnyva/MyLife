@@ -1,9 +1,9 @@
 function init() {
 	autocomplete("#tags", tags, ",");
 	
-	$("#guess").click(function () {
-		getData("plugins/journaler/Journaler.php", "body");
-	});
+	// $("#guess").click(function () {
+	// 	getData("plugins/journaler/Journaler.php", "body");
+	// });
 
 	$("#show").click(function () {
 		getData("plugins/journaler/show.php","what-i-did");

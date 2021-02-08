@@ -33,7 +33,7 @@ echo $page_title;
 <input type="text" name="search" id="search" placeholder="Search..." value="<?php echo i($QUERY, 'search') ?>" class="form-control" />
 <span class="input-group-btn"><button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button></span>
 </form></li>
-		<li><a class="calendar with-icon" href="<?php echo $config['app_url']; ?>calendar.php"> Calendar</a></li>
+		<li><a class="calendar with-icon" href="<?php echo $config['app_url']; ?>journal.php"> Journal View</a></li>
 		<li><a class="previous with-icon" href="<?php echo $config['app_url']; ?>index.php?date=<?php echo date('Y-m-d', strtotime('Yesterday')); ?>"> Yesterday</a></li>
 		<li><a class="add with-icon" href="<?php echo $config['app_url']; ?>index.php?date=<?php echo date('Y-m-d'); ?>"> Today</a></li>
 		</ul>
@@ -53,7 +53,7 @@ echo $page_title;
 <?php 
 /////////////////////////////////// The Template file will appear here ////////////////////////////
 
-include($GLOBALS['template']->template); 
+include(iapp('template')->template); 
 
 /////////////////////////////////// The Template file will appear here ////////////////////////////
 ?>

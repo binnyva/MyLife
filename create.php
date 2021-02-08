@@ -2,17 +2,29 @@
 require("./common.php");
 
 $date = i($QUERY, 'date', date("Y-m-d", strtotime('yesterday')));
+$summary_timeframe = i($QUERY, 'summary_timeframe');
 $entry = [
 	'id'	=> 0,
 	'date'	=> $date,
+	'summary_timeframe'	=> null,
 	'title'	=> '',
 	'body'	=> '',
 	'tags'	=> []
 ];
-if($date) { // Entry on given date
-	$entry_option = $t_entry->getByDate($date);
-	if($entry_option) $entry = $entry_option;
+
+$existing_entry = null;
+if($summary_timeframe) {
+	$existing_entry = $t_entry->getBySummaryTimeframe($summary_timeframe);
+	if(!$existing_entry) {
+		$entry['date'] = null;
+		$entry['summary_timeframe'] = $summary_timeframe;
+	}
+
+} elseif($date) { // Entry on given date
+	$existing_entry = $t_entry->getByDate($date);
 }
+
+if($existing_entry) $entry = $existing_entry;
 
 $all_tags = $t_tag->getAll();
 

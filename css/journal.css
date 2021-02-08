@@ -1,0 +1,7 @@
+.entry-save {
+	display: none;
+}
+
+nav .pagination a {
+	background-image: none !important;
+}
