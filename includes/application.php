@@ -62,7 +62,7 @@ function showTags($tags, $prefix = '') {
 	if($tags) {
 		print $prefix . '<ul class="tags">';
 		foreach ($tags as $id => $tag) {
-			print "<li><a class='with-icon tag' href='" . iframe\App::$config['app_url'] . "index.php?tag=$tag[name]' style='background-color:$tag[color]'>$tag[name]</a></li>";
+			print "<li><a class='with-icon tag' href='" . iframe\App::$config['app_url'] . "journal.php?tag=$tag[name]' style='background-color:$tag[color]'>$tag[name]</a></li>";
 		}
 		print '</ul>';
 	}
